@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+group 'com.discord.bots'
+version '1.1'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    implementation 'org.javacord:javacord:3.1.2'
+    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.11.0'
+    // sdcf4j
+    implementation 'de.btobastian.sdcf4j:sdcf4j-core:1.0.10'
+    implementation 'de.btobastian.sdcf4j:sdcf4j-javacord:1.0.10'
+}
+
+task stage(dependsOn: ['build','shadowJar', 'clean', 'test'])
+build.mustRunAfter clean
+build.mustRunAfter test
+
+jar {
+    manifest{
+        attributes 'Class-Path': '/libs/java_tutorial_bot-1.1-all.jar', 'Main-Class': 'com.discord.bots.Main'
+    }
+}
